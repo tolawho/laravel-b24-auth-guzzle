@@ -1,7 +1,8 @@
 {
     "name": "zedsh/laravel-b24-auth-guzzle",
     "description": "Bitrix24 laravel Oauth middleware on Guzzle",
-    "type": "library",
+    "version": "1.0.0",
+		"type": "library",
     "require": {
         "guzzlehttp/guzzle": "^6.3"
     },
@@ -12,7 +13,6 @@
             "email": "zedsh@icloud.com"
         }
     ],
-    "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
             "zedsh\\laravel\\B24\\": "src/"
