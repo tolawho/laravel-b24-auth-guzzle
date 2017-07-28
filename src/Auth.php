@@ -11,7 +11,14 @@ class Auth
     $this->client = new \GuzzleHttp\Client();
     }
 
-    public function process_response($response)
+    public function check_access()
+    { 
+    $name='methods';
+		$response=$this->client->request('GET',env('B24_HOSTNAME').'/rest/'.$name.'.json',['query'=>['auth'=>session('b24_credentials')->access_token]]);
+		return ($response->getStatusCode()==200); 
+    }
+		
+		public function process_response($response)
     {
       if($response->getStatusCode()==200){
       $cred=json_decode($response->getBody());
@@ -71,13 +78,15 @@ class Auth
         return $this->step2($request);
         }
 
-      if (!$request->session()->has('b24_credentials')) {
+      	if (!$request->session()->has('b24_credentials')) {
         return $this->step1();
         }
 
         if (time() > $request->session()->get('b24_credentials')->expires_at){
         return $this->toket_refresh();
         }
+
+				if(!$this->check_access()) return $this->step1();
 
    return $next($request);
    }
