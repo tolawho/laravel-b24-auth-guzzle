@@ -2,6 +2,8 @@
 
 namespace zedsh\laravel\B24;
 
+use Illuminate\Support\Facades\Auth as NativeAuth;
+
 class Auth
 {
    	public $client;
@@ -11,7 +13,12 @@ class Auth
     $this->client = new \GuzzleHttp\Client();
     }
 
-    public function check_access()
+    public function refresh_user()
+		{
+		 if(!NativeAuth::guest() && method_exists(NativeAuth::user(),'B24Refresh')) NativeAuth::user()->B24Refresh();
+		}
+		
+		public function check_access()
     { 
     $name='methods';
 		$response=$this->client->request('GET',env('B24_HOSTNAME').'/rest/'.$name.'.json',['query'=>['auth'=>session('b24_credentials')->access_token]]);
@@ -88,7 +95,9 @@ class Auth
 
 				if(!$this->check_access()) return $this->step1();
 
-   return $next($request);
+   			$this->refresh_user();
+
+	 return $next($request);
    }
 
 }
