@@ -3,16 +3,23 @@ This is middleware for lavarel that ensures the user has bitrix24 authorization 
 
 # Features
 Two step auth
+
 Check expires
+
 Refresh User Data on 2 step of auth
+
 Check auth
 
 
 # Installation
 Step 1.
+
 In .env:
+
 B24_HOSTNAME=https://[yourhostname].bitrix24.ru
+
 B24_CLIENT_ID=
+
 B24_CLIENT_SECRET=
 
 Step 2.
