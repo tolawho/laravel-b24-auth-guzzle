@@ -39,14 +39,17 @@ In app/Http/Kernel.php:
 
 Step 3.
 In routes/web.php:
-//Add middleware with param 'two' in root of site - two step of auth work over this.
-Route::get('/', 'HomeController@index')->name('root page')->middleware('b24auth:two');
-//Add middleware with param 'init' in both route of site, and step 1 auth work on this route. After auth work redirect to root and work step two.
-Route::get('/b24_state', 'HomeController@getB24State')->name('b24_state')->middleware('b24auth:init');
+
+    //Add middleware with param 'two' in root of site - two step of auth work over this.
+    Route::get('/', 'HomeController@index')->name('root page')->middleware('b24auth:two');
+    //Add middleware with param 'init' in both route of site, and step 1 auth work on this route. After auth work redirect to root and work step two.
+    Route::get('/b24_state', 'HomeController@getB24State')->name('b24_state')->middleware('b24auth:init');
 
 
 # For refresh user 
+
 In app/User.php:
+
 //Add Method in User class:
 
     public function B24Refresh()
