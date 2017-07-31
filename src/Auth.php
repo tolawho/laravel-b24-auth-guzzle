@@ -56,7 +56,8 @@ class Auth
     if(!$this->process_response($response)) return $this->step1();
 
 
-    return redirect(route('transactions'));
+   	$this->refresh_user();
+    return redirect(\URL::to('/'));
     }
 
     public function toket_refresh()
@@ -78,24 +79,25 @@ class Auth
     return $next($request);
     }
 
-    public function handle($request, \Closure $next)
+		
+		
+		public function handle($request, \Closure $next,$step='two')
     {
 
         if ($request->has(['code','domain','member_id'])) {
         return $this->step2($request);
         }
 
-      	if (!$request->session()->has('b24_credentials')) {
+      	if ($step=='init' && !$request->session()->has('b24_credentials')) {
         return $this->step1();
         }
 
-        if (time() > $request->session()->get('b24_credentials')->expires_at){
+        if ($step=='init' && $request->session()->has('b24_credentials') && time() > $request->session()->get('b24_credentials')->expires_at){
         return $this->toket_refresh();
         }
 
-				if(!$this->check_access()) return $this->step1();
+				if($step=='init' && !$this->check_access()) return $this->step1();
 
-   			$this->refresh_user();
 
 	 return $next($request);
    }
